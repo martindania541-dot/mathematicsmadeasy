@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f4ef">
+  <title>BECE LEANERS| FAUX.ORG</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172a22;
+      --muted: #78827b;
+      --green: #245c43;
+      --green-dark: #194733;
+      --mint: #e8f1e8;
+      --paper: #fffefa;
+      --canvas: #f5f4ef;
+      --line: #e9e9e1;
+      --gold: #f1bd61;
+      --red: #b94e43;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      background: var(--canvas);
+    }
+
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+
+    .app-shell { display: grid; grid-template-columns: 248px minmax(0, 1fr); min-height: 100vh; }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      padding: 27px 19px 22px;
+      color: #edf4ed;
+      background: var(--green-dark);
+    }
+
+    .brand { display: flex; align-items: center; gap: 11px; padding: 2px 7px 32px; }
+    .brand-mark {
+      display: grid;
+      width: 39px;
+      height: 39px;
+      place-items: center;
+      border-radius: 12px;
+      color: var(--green-dark);
+      background: var(--gold);
+      font-size: 19px;
+      font-weight: 800;
+    }
+    .brand-name { font-size: 14px; font-weight: 750; letter-spacing: -.2px; }
+    .brand-caption { margin-top: 3px; color: #b8cdbd; font-size: 11px; }
+    .side-label { margin: 3px 8px 11px; color: #a4bdab; font-size: 10px; font-weight: 750; letter-spacing: 1.2px; text-transform: uppercase; }
+    .year-list { display: grid; gap: 5px; }
+    .year-button {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 11px 12px;
+      border: 0;
+      border-radius: 9px;
+      color: #d3e2d6;
+      background: transparent;
+      text-align: left;
+      transition: background .16s, color .16s;
+    }
+    .year-button:hover { background: #ffffff12; }
+    .year-button.active { color: white; background: #ffffff1b; font-weight: 700; }
+    .year-count { color: #a5bba9; font-size: 11px; }
+    .side-spacer { flex: 1; }
+    .study-note { padding: 14px; border: 1px solid #ffffff20; border-radius: 12px; background: #ffffff09; }
+    .study-note strong { display: block; margin-bottom: 6px; font-size: 12px; }
+    .study-note p { margin: 0; color: #c1d2c4; font-size: 11px; line-height: 1.6; }
+    .side-footer { padding: 18px 7px 0; color: #a4bdab; font-size: 10px; }
+
+    main { min-width: 0; padding: 30px clamp(20px, 5vw, 64px) 60px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; max-width: 1120px; margin: 0 auto 30px; }
+    .breadcrumbs { color: var(--muted); font-size: 12px; }
+    .breadcrumbs strong { color: var(--ink); font-weight: 650; }
+    .profile { display: flex; align-items: center; gap: 9px; color: #526158; font-size: 12px; }
+    .profile-icon { display: grid; width: 31px; height: 31px; place-items: center; border-radius: 50%; color: var(--green); background: #e4ece2; font-weight: 750; }
+    .content { max-width: 1120px; margin: 0 auto; }
+
+    .welcome {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 190px;
+      padding: 31px 38px;
+      border-radius: 18px;
+      color: white;
+      background: var(--green);
+    }
+    .welcome::after {
+      position: absolute;
+      top: -105px;
+      right: 7%;
+      width: 290px;
+      height: 290px;
+      border: 1px solid #ffffff20;
+      border-radius: 50%;
+      box-shadow: 0 0 0 27px #ffffff08, 0 0 0 56px #ffffff08;
+      content: "";
+    }
+    .welcome-copy { position: relative; z-index: 1; max-width: 590px; }
+    .eyebrow { color: #c5dbca; font-size: 10px; font-weight: 750; letter-spacing: 1.5px; text-transform: uppercase; }
+    h1 { margin: 9px 0 8px; font-size: clamp(24px, 3vw, 34px); letter-spacing: -1.2px; line-height: 1.14; }
+    .welcome p { max-width: 525px; margin: 0; color: #d6e5d9; font-size: 13px; line-height: 1.65; }
+    .welcome-stamp { position: relative; z-index: 1; display: grid; width: 94px; height: 94px; flex: 0 0 auto; place-items: center; margin: 0 38px 0 20px; border: 1px solid #ffffff40; border-radius: 50%; color: var(--gold); font-size: 34px; font-weight: 750; }
+
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 17px 0 28px; }
+    .stat-card { display: flex; align-items: center; gap: 13px; padding: 16px 18px; border: 1px solid var(--line); border-radius: 13px; background: var(--paper); }
+    .stat-icon { display: grid; width: 38px; height: 38px; flex: 0 0 auto; place-items: center; border-radius: 11px; color: var(--green); background: var(--mint); font-size: 17px; font-weight: 750; }
+    .stat-value { font-size: 19px; font-weight: 750; letter-spacing: -.5px; }
+    .stat-label { margin-top: 3px; color: var(--muted); font-size: 10px; }
+
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin: 0 0 17px; }
+    h2 { margin: 0; font-size: 19px; letter-spacing: -.5px; }
+    .section-subtitle { margin: 5px 0 0; color: var(--muted); font-size: 12px; }
+    .filters { display: flex; gap: 9px; }
+    .control {
+      min-height: 38px;
+      padding: 0 11px;
+      border: 1px solid #dedfd7;
+      border-radius: 9px;
+      color: #35453b;
+      background: var(--paper);
+      font-size: 11px;
+      outline: none;
+    }
+    .control:focus { border-color: var(--green); box-shadow: 0 0 0 3px #245c4316; }
+    .search { width: 190px; }
+
+    .notice { display: flex; gap: 10px; margin: 0 0 17px; padding: 11px 13px; border: 1px solid #eee2c9; border-radius: 10px; color: #735d31; background: #fff9eb; font-size: 10px; line-height: 1.55; }
+    .notice-icon { font-weight: 800; }
+    .question-list { display: grid; gap: 12px; }
+    .question-card { padding: 18px 20px; border: 1px solid var(--line); border-radius: 13px; background: var(--paper); }
+    .question-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+    .question-meta { display: flex; align-items: center; gap: 8px; }
+    .question-number { color: var(--muted); font-size: 10px; font-weight: 700; }
+    .topic-tag { padding: 5px 8px; border-radius: 20px; color: var(--green); background: var(--mint); font-size: 9px; font-weight: 700; }
+    .year-tag { color: #8a918b; font-size: 10px; }
+    .question-text { margin: 0 0 15px; font-size: 14px; font-weight: 650; line-height: 1.55; }
+    .options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    .option {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      min-height: 40px;
+      padding: 10px 11px;
+      border: 1px solid #e8e9e2;
+      border-radius: 9px;
+      color: #47544c;
+      background: #fff;
+      text-align: left;
+      font-size: 11px;
+      line-height: 1.45;
+      transition: border-color .15s, background .15s;
+    }
+    .option:hover:not(:disabled) { border-color: #9ab5a0; background: #f7faf6; }
+    .option:disabled { cursor: default; opacity: 1; }
+    .option-letter { display: grid; width: 19px; height: 19px; flex: 0 0 auto; place-items: center; margin-top: -1px; border-radius: 6px; color: #728078; background: #f0f1ec; font-size: 9px; font-weight: 750; }
+    .option.correct { border-color: #8db99a; color: #245c43; background: #eef7ef; }
+    .option.correct .option-letter { color: white; background: #47865d; }
+    .option.incorrect { border-color: #e1aaa4; color: #934b43; background: #fff3f1; }
+    .option.incorrect .option-letter { color: white; background: #bd685e; }
+    .answer-row { display: flex; align-items: center; gap: 12px; margin-top: 13px; }
+    .answer-button { padding: 0; border: 0; color: var(--green); background: transparent; font-size: 11px; font-weight: 750; }
+    .answer-button:hover { color: var(--green-dark); text-decoration: underline; }
+    .feedback { color: var(--muted); font-size: 10px; }
+    .feedback.good { color: #34794b; }
+    .feedback.bad { color: var(--red); }
+    .explanation { margin-top: 12px; padding: 11px 13px; border-left: 3px solid #8eaf91; border-radius: 0 8px 8px 0; color: #526158; background: #f3f7f1; font-size: 11px; line-height: 1.65; }
+    .empty-state { padding: 40px 20px; border: 1px dashed #d6d9d0; border-radius: 12px; color: var(--muted); background: #ffffff70; text-align: center; font-size: 13px; }
+    .mobile-brand { display: none; }
+
+    @media (max-width: 800px) {
+      .app-shell { grid-template-columns: 1fr; }
+      .sidebar { position: static; height: auto; padding: 14px 18px 12px; }
+      .brand { padding: 0 0 13px; }
+      .side-label, .study-note, .side-footer, .side-spacer { display: none; }
+      .year-list { display: flex; overflow-x: auto; gap: 7px; padding-bottom: 2px; }
+      .year-button { width: auto; flex: 0 0 auto; padding: 8px 11px; border: 1px solid #ffffff22; font-size: 11px; }
+      .year-count { margin-left: 8px; }
+      main { padding: 20px 18px 42px; }
+      .topbar { margin-bottom: 19px; }
+      .welcome { min-height: 170px; padding: 25px; }
+      .welcome-stamp { width: 70px; height: 70px; margin-right: 12px; font-size: 26px; }
+      .stats { gap: 9px; }
+      .stat-card { gap: 9px; padding: 13px 11px; }
+      .stat-icon { width: 32px; height: 32px; }
+      .section-heading { align-items: flex-start; flex-direction: column; }
+      .filters { width: 100%; }
+      .search { min-width: 90px; flex: 1; }
+    }
+
+    @media (max-width: 520px) {
+      .welcome { padding: 22px 19px; }
+      .welcome-stamp { display: none; }
+      .stats { grid-template-columns: 1fr; }
+      .stat-card { padding: 11px 13px; }
+      .stat-value { font-size: 17px; }
+      .filters { flex-wrap: wrap; }
+      .filters .control { flex: 1; }
+      .filters .search { flex-basis: 100%; }
+      .question-card { padding: 15px; }
+      .options { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Practice navigation">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">∑</div>
+        <div>
+          <div class="brand-name">Maths Made Easy</div>
+          <div class="brand-caption">JSS3 · BECE practice</div>
+        </div>
+      </div>
+      <div class="side-label">Practice by year</div>
+      <nav class="year-list" id="year-list" aria-label="Choose a practice year"></nav>
+      <div class="side-spacer"></div>
+      <div class="study-note">
+        <strong>A little practice goes a long way</strong>
+        <p>Try each question before revealing the worked answer. You can change years or topics at any time.</p>
+      </div>
+      <div class="side-footer">Made for curious minds · JSS3</div>
+    </aside>
+
+    <main>
+      <div class="topbar">
+        <div class="breadcrumbs">Study space <span aria-hidden="true">/</span> <strong>Mathematics</strong></div>
+        <div class="profile"><span class="profile-icon" aria-hidden="true">M</span><span>Keep learning</span></div>
+      </div>
+
+      <div class="content">
+        <section class="welcome" aria-labelledby="welcome-title">
+          <div class="welcome-copy">
+            <div class="eyebrow">Your JSS3 revision space</div>
+            <h1 id="welcome-title">Make maths make sense.</h1>
+            <p>Build confidence with friendly, worked practice across the topics that matter for BECE mathematics.</p>
+          </div>
+          <div class="welcome-stamp" aria-hidden="true">÷</div>
+        </section>
+
+        <section class="stats" aria-label="Practice summary">
+          <div class="stat-card">
+            <div class="stat-icon" aria-hidden="true">Q</div>
+            <div><div class="stat-value" id="total-count">0</div><div class="stat-label">Practice questions</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" aria-hidden="true">✓</div>
+            <div><div class="stat-value" id="correct-count">0</div><div class="stat-label">Answered correctly</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" aria-hidden="true">◎</div>
+            <div><div class="stat-value" id="topic-count">0</div><div class="stat-label">Topics to explore</div></div>
+          </div>
+        </section>
+
+        <section aria-labelledby="practice-title">
+          <div class="section-heading">
+            <div>
+              <h2 id="practice-title">Practice questions</h2>
+              <p class="section-subtitle" id="result-summary">Choose a question and give it a try.</p>
+            </div>
+            <div class="filters">
+              <input class="control search" id="search-input" type="search" placeholder="Search questions…" aria-label="Search questions">
+              <select class="control" id="topic-filter" aria-label="Filter by topic">
+                <option value="all">All topics</option>
+              </select>
+            </div>
+          </div>
+          <div class="notice" role="note">
+            <span class="notice-icon" aria-hidden="true">i</span>
+            <span>These are original BECE-style revision questions, not official past-paper questions. They are grouped by practice year for revision; answers include short working.</span>
+          </div>
+          <div class="question-list" id="question-list" aria-live="polite"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const questions = [
+      { year: 2022, topic: "Number", prompt: "Evaluate ¾ + ⅖, giving your answer in its simplest form.", options: ["1 ³⁄₂₀", "1 ¹⁄₁₀", "⁷⁄₂₀", "1 ⁷⁄₂₀"], answer: 0, explanation: "The lowest common denominator of 4 and 5 is 20. So ¾ + ⅖ = ¹⁵⁄₂₀ + ⁸⁄₂₀ = ²³⁄₂₀ = 1 ³⁄₂₀." },
+      { year: 2022, topic: "Algebra", prompt: "Solve for x: 3x − 7 = 14.", options: ["5", "7", "9", "21"], answer: 1, explanation: "Add 7 to both sides: 3x = 21. Divide both sides by 3, so x = 7." },
+      { year: 2022, topic: "Geometry", prompt: "Two angles in a triangle are 48° and 67°. Find the third angle.", options: ["55°", "65°", "75°", "115°"], answer: 1, explanation: "Angles in a triangle add up to 180°. The third angle is 180° − 48° − 67° = 65°." },
+      { year: 2022, topic: "Ratio", prompt: "Share ₦2,400 in the ratio 3 : 5. What is the larger share?", options: ["₦900", "₦1,200", "₦1,500", "₦1,800"], answer: 2, explanation: "There are 3 + 5 = 8 parts. The larger share is ⁵⁄₈ × ₦2,400 = ₦1,500." },
+      { year: 2022, topic: "Statistics", prompt: "Find the mean of 4, 6, 8, 10 and 12.", options: ["6", "7", "8", "10"], answer: 2, explanation: "Add the values: 4 + 6 + 8 + 10 + 12 = 40. Divide by the 5 values: 40 ÷ 5 = 8." },
+      { year: 2022, topic: "Measurement", prompt: "A rectangle is 9 cm long and 4 cm wide. What is its perimeter?", options: ["13 cm", "26 cm", "36 cm", "72 cm"], answer: 1, explanation: "Perimeter = 2 × (length + width) = 2 × (9 + 4) = 26 cm." },
+
+      { year: 2023, topic: "Number", prompt: "Write 0.375 as a fraction in its simplest form.", options: ["⅜", "³⁄₈₀", "³⁄₅", "⁷⁄₂₀"], answer: 0, explanation: "0.375 = 375⁄1000. Divide numerator and denominator by 125 to get ⅜." },
+      { year: 2023, topic: "Algebra", prompt: "Simplify 5a + 3b − 2a + b.", options: ["3a + 2b", "7a + 4b", "3a + 4b", "7ab"], answer: 2, explanation: "Collect like terms: 5a − 2a = 3a and 3b + b = 4b. The result is 3a + 4b." },
+      { year: 2023, topic: "Geometry", prompt: "An angle on a straight line is split into 124° and x°. Find x.", options: ["46°", "56°", "66°", "124°"], answer: 1, explanation: "Angles on a straight line add to 180°. So x = 180° − 124° = 56°." },
+      { year: 2023, topic: "Percentage", prompt: "A school bag costs ₦8,000. Its price is reduced by 15%. What is the new price?", options: ["₦6,500", "₦6,800", "₦7,200", "₦7,850"], answer: 1, explanation: "15% of ₦8,000 is ₦1,200. Subtract the reduction: ₦8,000 − ₦1,200 = ₦6,800." },
+      { year: 2023, topic: "Measurement", prompt: "Convert 2.4 kilometres to metres.", options: ["24 m", "240 m", "2,040 m", "2,400 m"], answer: 3, explanation: "1 kilometre = 1,000 metres. Therefore, 2.4 × 1,000 = 2,400 metres." },
+      { year: 2023, topic: "Statistics", prompt: "What is the median of 3, 9, 5, 11 and 7?", options: ["5", "7", "8", "9"], answer: 1, explanation: "Arrange the values in order: 3, 5, 7, 9, 11. The middle value is 7." },
+
+      { year: 2024, topic: "Number", prompt: "Evaluate 2³ + 3².", options: ["13", "15", "17", "25"], answer: 2, explanation: "2³ = 8 and 3² = 9. Add them: 8 + 9 = 17." },
+      { year: 2024, topic: "Algebra", prompt: "If y = 2x + 3, find y when x = 4.", options: ["8", "10", "11", "14"], answer: 2, explanation: "Substitute x = 4: y = 2(4) + 3 = 8 + 3 = 11." },
+      { year: 2024, topic: "Geometry", prompt: "A square has a side length of 7 cm. Find its area.", options: ["14 cm²", "28 cm²", "49 cm²", "56 cm²"], answer: 2, explanation: "Area of a square = side × side = 7 × 7 = 49 cm²." },
+      { year: 2024, topic: "Ratio", prompt: "A drink is mixed using 2 cups of concentrate for every 5 cups of water. How many cups of water are needed for 6 cups of concentrate?", options: ["10", "12", "15", "18"], answer: 2, explanation: "The concentrate is multiplied by 3 (2 × 3 = 6), so multiply the water by 3 too: 5 × 3 = 15 cups." },
+      { year: 2024, topic: "Probability", prompt: "A fair six-sided die is rolled once. What is the probability of getting an even number?", options: ["⅙", "⅓", "½", "⅔"], answer: 2, explanation: "The even outcomes are 2, 4 and 6: 3 favourable outcomes out of 6. So the probability is 3⁄6 = ½." },
+      { year: 2024, topic: "Measurement", prompt: "A bus travels 150 km in 3 hours. What is its average speed?", options: ["45 km/h", "50 km/h", "75 km/h", "450 km/h"], answer: 1, explanation: "Speed = distance ÷ time = 150 ÷ 3 = 50 km/h." },
+
+      { year: 2025, topic: "Number", prompt: "Round 38,647 to the nearest thousand.", options: ["38,000", "38,600", "39,000", "40,000"], answer: 2, explanation: "The hundreds digit is 6, so round the thousands digit up. 38,647 rounds to 39,000." },
+      { year: 2025, topic: "Algebra", prompt: "Factorise 6x + 12.", options: ["6(x + 2)", "3(2x + 12)", "2(3x + 12)", "6(x + 12)"], answer: 0, explanation: "The highest common factor of 6x and 12 is 6. Taking it out gives 6(x + 2)." },
+      { year: 2025, topic: "Geometry", prompt: "A right-angled triangle has shorter sides of 6 cm and 8 cm. Find its hypotenuse.", options: ["9 cm", "10 cm", "12 cm", "14 cm"], answer: 1, explanation: "By Pythagoras' theorem, hypotenuse² = 6² + 8² = 36 + 64 = 100. The hypotenuse is √100 = 10 cm." },
+      { year: 2025, topic: "Percentage", prompt: "What is 25% of 360?", options: ["45", "72", "90", "120"], answer: 2, explanation: "25% is one quarter. 360 ÷ 4 = 90." },
+      { year: 2025, topic: "Statistics", prompt: "Find the range of 14, 8, 21, 17 and 11.", options: ["8", "11", "13", "21"], answer: 2, explanation: "Range = largest value − smallest value = 21 − 8 = 13." },
+      { year: 2025, topic: "Measurement", prompt: "A cuboid is 5 cm long, 3 cm wide and 4 cm high. Find its volume.", options: ["12 cm³", "20 cm³", "47 cm³", "60 cm³"], answer: 3, explanation: "Volume of a cuboid = length × width × height = 5 × 3 × 4 = 60 cm³." }
+    ];
+
+    const state = { year: "all", topic: "all", search: "", responses: new Map(), revealed: new Set() };
+    const yearList = document.querySelector("#year-list");
+    const topicFilter = document.querySelector("#topic-filter");
+    const questionList = document.querySelector("#question-list");
+
+    function setupFilters() {
+      const years = [...new Set(questions.map((question) => question.year))].sort((a, b) => b - a);
+      const yearButtons = [{ value: "all", label: "All years" }, ...years.map((year) => ({ value: String(year), label: String(year) }))];
+      yearList.innerHTML = yearButtons.map((item) => {
+        const count = item.value === "all" ? questions.length : questions.filter((question) => question.year === Number(item.value)).length;
+        return `<button class="year-button${item.value === state.year ? " active" : ""}" type="button" data-year="${item.value}" aria-pressed="${item.value === state.year}"><span>${item.label}</span><span class="year-count">${count}</span></button>`;
+      }).join("");
+
+      const topics = [...new Set(questions.map((question) => question.topic))].sort();
+      topicFilter.innerHTML = '<option value="all">All topics</option>' + topics.map((topic) => `<option value="${topic}">${topic}</option>`).join("");
+      document.querySelector("#total-count").textContent = questions.length;
+      document.querySelector("#topic-count").textContent = topics.length;
+    }
+
+    function visibleQuestions() {
+      const search = state.search.trim().toLowerCase();
+      return questions.map((question, index) => ({ ...question, index })).filter((question) => {
+        const matchesYear = state.year === "all" || question.year === Number(state.year);
+        const matchesTopic = state.topic === "all" || question.topic === state.topic;
+        const searchable = `${question.prompt} ${question.topic} ${question.options.join(" ")}`.toLowerCase();
+        return matchesYear && matchesTopic && searchable.includes(search);
+      });
+    }
+
+    function render() {
+      const visible = visibleQuestions();
+      const summary = visible.length === questions.length
+        ? `${visible.length} questions across four practice years`
+        : `${visible.length} question${visible.length === 1 ? "" : "s"} found`;
+      document.querySelector("#result-summary").textContent = summary;
+
+      if (!visible.length) {
+        questionList.innerHTML = '<div class="empty-state">No questions match those filters. Try another year, topic or search.</div>';
+        return;
+      }
+
+      questionList.innerHTML = visible.map((question, position) => {
+        const chosen = state.responses.get(question.index);
+        const revealed = state.revealed.has(question.index);
+        const feedback = chosen === undefined ? "" : chosen === question.answer
+          ? '<span class="feedback good">That’s right — well done!</span>'
+          : '<span class="feedback bad">Not quite. Have another look at the answer.</span>';
+        const options = question.options.map((option, optionIndex) => {
+          let className = "option";
+          if (revealed && optionIndex === question.answer) className += " correct";
+          else if (chosen === optionIndex && chosen !== question.answer) className += " incorrect";
+          return `<button class="${className}" type="button" data-question="${question.index}" data-option="${optionIndex}" ${chosen !== undefined ? "disabled" : ""}><span class="option-letter">${String.fromCharCode(65 + optionIndex)}</span><span>${option}</span></button>`;
+        }).join("");
+        const explanation = revealed
+          ? `<div class="explanation"><strong>Answer: ${String.fromCharCode(65 + question.answer)}. ${question.options[question.answer]}</strong><br>${question.explanation}</div>`
+          : "";
+        const action = revealed
+          ? `<button class="answer-button" type="button" data-toggle="${question.index}">Hide working</button>`
+          : `<button class="answer-button" type="button" data-reveal="${question.index}">Show answer &amp; working</button>`;
+        return `<article class="question-card">
+          <div class="question-top"><div class="question-meta"><span class="question-number">QUESTION ${position + 1}</span><span class="topic-tag">${question.topic}</span></div><span class="year-tag">Practice ${question.year}</span></div>
+          <p class="question-text">${question.prompt}</p>
+          <div class="options">${options}</div>
+          <div class="answer-row">${action}${feedback}</div>
+          ${explanation}
+        </article>`;
+      }).join("");
+    }
+
+    yearList.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-year]");
+      if (!button) return;
+      state.year = button.dataset.year;
+      yearList.querySelectorAll(".year-button").forEach((item) => {
+        const active = item === button;
+        item.classList.toggle("active", active);
+        item.setAttribute("aria-pressed", String(active));
+      });
+      render();
+    });
+
+    topicFilter.addEventListener("change", (event) => {
+      state.topic = event.target.value;
+      render();
+    });
+
+    document.querySelector("#search-input").addEventListener("input", (event) => {
+      state.search = event.target.value;
+      render();
+    });
+
+    questionList.addEventListener("click", (event) => {
+      const option = event.target.closest("[data-option]");
+      if (option) {
+        const questionIndex = Number(option.dataset.question);
+        if (!state.responses.has(questionIndex)) {
+          state.responses.set(questionIndex, Number(option.dataset.option));
+          const correct = [...state.responses.entries()].filter(([index, answer]) => questions[index].answer === answer).length;
+          document.querySelector("#correct-count").textContent = correct;
+          render();
+        }
+        return;
+      }
+      const revealButton = event.target.closest("[data-reveal]");
+      const toggleButton = event.target.closest("[data-toggle]");
+      if (revealButton) state.revealed.add(Number(revealButton.dataset.reveal));
+      if (toggleButton) state.revealed.delete(Number(toggleButton.dataset.toggle));
+      if (revealButton || toggleButton) render();
+    });
+
+    setupFilters();
+    render();
+  </script>
+</body>
+</html>
